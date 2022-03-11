@@ -32,8 +32,7 @@ const handleChoosePhotoAndroid = async () => {
         documents.forEach((el: any) => {
           const doc = JSON.parse(el);
           
-          console.log("doc", doc);
-          
+          console.log("doc:", doc);
           // {"fileName": "some_pdf_file.pdf", 
           // "fileSize": "450110", 
           // "fileType": "application/pdf", 
