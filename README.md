@@ -14,7 +14,7 @@ import AndroidDocumentPicker from 'react-native-android-document-picker';
 ```
 
 ### openDocument
-```
+```javascript
 AndroidDocumentPicker.openDocument({
     multipleFiles: boolean,
     fileTypes: object,
@@ -24,7 +24,8 @@ AndroidDocumentPicker.openDocument({
 );
 ```
 
-```
+### openDocument usage
+```javascript
 const handleChoosePhotoAndroid = async () => {
     await AndroidDocumentPicker.openDocument({multipleFiles: false, fileTypes: ["application/pdf", "image/*"]},
       (documents: any) => {
