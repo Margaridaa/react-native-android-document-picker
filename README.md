@@ -1,5 +1,13 @@
 # react-native-android-document-picker
 
+<a href="https://https://github.com/Margaridaa/react-native-android-document-picker/pulls" target="_blank">
+<img  src="https://img.shields.io/badge/PRs-welcome-green?color=blue"/>
+</a>
+<a href="https://www.npmjs.com/package/react-native-android-document-picker" target="_blank">
+<img src="https://img.shields.io/npm/v/react-native-android-document-picker?color=violet"/>
+</a>
+
+#### **Note**: This library is Android specific.
 ## Getting started
 
 `$ npm install react-native-android-document-picker --save`

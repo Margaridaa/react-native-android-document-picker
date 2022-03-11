@@ -1,8 +1,8 @@
 {
   "name": "react-native-android-document-picker",
   "title": "React Native Android Document Picker",
-  "version": "1.0.0",
-  "description": "TODO",
+  "version": "1.0.1",
+  "description": "React Native Document Picker for Android",
   "main": "index.js",
   "files": [
     "README.md",
@@ -16,15 +16,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/github_account/react-native-android-document-picker.git",
-    "baseUrl": "https://github.com/github_account/react-native-android-document-picker"
+    "url": "git+https://github.com/margaridaa/react-native-android-document-picker.git",
+    "baseUrl": "https://github.com/margaridaa/react-native-android-document-picker"
   },
   "keywords": [
-    "react-native"
+    "react-native",
+    "android",
+    "document picker",
+    "image picker"
   ],
   "author": {
-    "name": "Your Name",
-    "email": "yourname@email.com"
+    "name": "Margaridaa",
+    "email": "margaridaagithub@gmail.com"
   },
   "license": "MIT",
   "licenseFilename": "LICENSE",
