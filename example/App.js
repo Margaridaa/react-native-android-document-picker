@@ -15,7 +15,7 @@ import { StyleSheet, View, Text, Image, ScrollView } from 'react-native';
 
 export default function App() {
 
-  const [files, setFiles] = useState(["https://reactjs.org/logo-og.png"]);
+  const [files, setFiles] = useState([]);
 
   useEffect(() => {
     console.log('files', files);
@@ -25,10 +25,29 @@ export default function App() {
     <View style={styles.container}>
       <ScrollView>
       <Text onPress={async () => {
-        await AndroidDocumentPicker.openDocument({multipleFiles: false, fileTypes: ["application/pdf"]}, (array) => {
+
+        let newFiles = [...files];
+
+        await AndroidDocumentPicker.openDocument({multipleFiles: true, fileTypes: ["image/*"]}, (array) => {
           console.log('array', array);
-          setFiles(array);
-          setUpdate(!update);
+          array.forEach((el) => {
+            const doc = JSON.parse(el);
+          
+            console.log("doc:", doc);
+            // {"fileName": "some_pdf_file.pdf", 
+            // "fileSize": "450110", 
+            // "fileType": "application/pdf", 
+            // "fileUri": "content://com.android.providers.downloads.documents/document/1058"}
+            
+            newFiles.push({
+            fileName: doc.fileName,
+            uri: doc.fileUri,
+            type: doc.fileType,
+            size: doc.fileSize
+            });
+          });
+
+          setFiles(newFiles);
         }, 
         (error) => {
           console.log('error', error);
@@ -38,8 +57,8 @@ export default function App() {
       <View>
         {files.map((file) => 
           <View key={file}>
-          <Text>{file}</Text>
-          <Image source={{uri: file.fileUri}}
+          <Text>{file.fileName}</Text>
+          <Image source={{uri: file.uri}}
           key={file}
           style={{
             borderColor: 'black',
@@ -51,12 +70,6 @@ export default function App() {
           }} />
         </View>
         )}
-      </View>
-
-      <View>
-        <Text onPress={() => {
-          setFiles(["https://reactjs.org/logo-og.png"]);
-        }}>Reset</Text>
       </View>
 
       </ScrollView>
