@@ -60,6 +60,7 @@ public class AndroidDocumentPickerModule extends ReactContextBaseJavaModule {
                 }
                 if (resultCode == RESULT_CANCELED) {
 
+                    selectedNumberOfFiles = 0;
                 }
             }
 
