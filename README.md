@@ -24,7 +24,7 @@ AndroidDocumentPicker.openDocument({
 );
 ```
 
-### openDocument usage
+#### openDocument usage
 ```javascript
 const handleChoosePhotoAndroid = async () => {
     await AndroidDocumentPicker.openDocument({multipleFiles: false, fileTypes: ["application/pdf", "image/*"]},
