@@ -35,7 +35,7 @@ public class AndroidDocumentPickerModule extends ReactContextBaseJavaModule {
 
     private static ReactApplicationContext reactContext;
     private ArrayList<Uri> selectedUris = new ArrayList<>();
-    private int selectedNumberOfFiles = 10;
+    private int selectedNumberOfFiles = 20;
 
     public AndroidDocumentPickerModule(ReactApplicationContext context) {
         super(context);
@@ -59,7 +59,6 @@ public class AndroidDocumentPickerModule extends ReactContextBaseJavaModule {
                     }
                 }
                 if (resultCode == RESULT_CANCELED) {
-
                     selectedNumberOfFiles = 0;
                 }
             }
@@ -113,9 +112,11 @@ public class AndroidDocumentPickerModule extends ReactContextBaseJavaModule {
 
         if (selectedUris.size() > 0) {
             WritableArray writableArray = convertToWritableArray(returnFileInfoObject());
+            selectedNumberOfFiles = 20;
             successCallback.invoke(writableArray);
         }
         else {
+            selectedNumberOfFiles = 20;
             failureCallback.invoke("Error");
         }
     }
