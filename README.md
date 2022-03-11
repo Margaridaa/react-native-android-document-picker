@@ -27,27 +27,31 @@ AndroidDocumentPicker.openDocument({
 #### openDocument usage
 ```javascript
 const handleChoosePhotoAndroid = async () => {
-    await AndroidDocumentPicker.openDocument({multipleFiles: false, fileTypes: ["application/pdf", "image/*"]},
-      (documents: any) => {
-        documents.forEach((el: any) => {
-          const doc = JSON.parse(el);
+    let newFiles = [...files];
+
+        await AndroidDocumentPicker.openDocument({multipleFiles: true, fileTypes: ["image/*"]}, (array) => {
+          array.forEach((el) => {
+            const doc = JSON.parse(el);
           
-          console.log("doc:", doc);
-          // {"fileName": "some_pdf_file.pdf", 
-          // "fileSize": "450110", 
-          // "fileType": "application/pdf", 
-          // "fileUri": "content://com.android.providers.downloads.documents/document/1058"}
-          
-          documentsAux.push({
-           fileName: doc.fileName,
-           uri: doc.fileUri,
-           type: doc.fileType,
+            console.log("doc:", doc);
+            // {"fileName": "some_pdf_file.pdf", 
+            // "fileSize": "450110", 
+            // "fileType": "application/pdf", 
+            // "fileUri": "content://com.android.providers.downloads.documents/document/1058"}
+            
+            newFiles.push({
+            fileName: doc.fileName,
+            uri: doc.fileUri,
+            type: doc.fileType,
+            size: doc.fileSize
+            });
           });
+
+          setFiles(newFiles);
+        }, 
+        (error) => {
+            console.log('error', error);
         });
-      },
-      (error: any) => {
-        console.log('error', error);
-      });
 ```
 
 #### To-do
