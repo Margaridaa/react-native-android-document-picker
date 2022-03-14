@@ -28,7 +28,7 @@ export default function App() {
 
         let newFiles = [...files];
 
-        await AndroidDocumentPicker.openDocument({multipleFiles: true, fileTypes: ["image/*"]}, (array) => {
+        await AndroidDocumentPicker.openDocument({multipleFiles: true, fileTypes: ["image/*", "application/pdf"]}, (array) => {
           console.log('array', array);
           array.forEach((el) => {
             const doc = JSON.parse(el);
@@ -56,7 +56,7 @@ export default function App() {
 
       <View>
         {files.map((file) => 
-          <View key={file}>
+          <View key={file.fileName}>
           <Text>{file.fileName}</Text>
           <Image source={{uri: file.uri}}
           key={file}
