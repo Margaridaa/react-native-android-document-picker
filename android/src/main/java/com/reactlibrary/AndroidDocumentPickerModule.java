@@ -6,7 +6,6 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
-import androidx.annotation.RequiresApi;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.ReadableArray;
@@ -21,7 +20,6 @@ import java.util.List;
 import android.app.Activity;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.OpenableColumns;
 import android.content.Intent;
 
@@ -35,7 +33,8 @@ public class AndroidDocumentPickerModule extends ReactContextBaseJavaModule {
 
     private static ReactApplicationContext reactContext;
     private ArrayList<Uri> selectedUris = new ArrayList<>();
-    private int selectedNumberOfFiles = 20;
+    private Callback successCallback;
+    private Callback failureCallback;
 
     public AndroidDocumentPickerModule(ReactApplicationContext context) {
         super(context);
@@ -46,20 +45,20 @@ public class AndroidDocumentPickerModule extends ReactContextBaseJavaModule {
                 if (requestCode == 9900 && resultCode == RESULT_OK) {
                     if (null != data) { // checking empty selection
                         if (null != data.getClipData()) { // checking multiple selection or not
-                            selectedNumberOfFiles = data.getClipData().getItemCount();
                             for (int i = 0; i < data.getClipData().getItemCount(); i++) {
                                 Uri d = data.getClipData().getItemAt(i).getUri();
                                 selectedUris.add(d);
                             }
                         } else {
                             Uri d = data.getData();
-                            selectedNumberOfFiles = 1;
                             selectedUris.add(d);
                         }
                     }
+                    WritableArray writableArray = convertToWritableArray(returnFileInfoObject());
+                    successCallback.invoke(writableArray);
                 }
                 if (resultCode == RESULT_CANCELED) {
-                    selectedNumberOfFiles = -1;
+                    failureCallback.invoke("Error");
                 }
             }
 
@@ -75,9 +74,11 @@ public class AndroidDocumentPickerModule extends ReactContextBaseJavaModule {
         return "AndroidDocumentPicker";
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @ReactMethod(isBlockingSynchronousMethod = true)
     public void openDocument(ReadableMap options, Callback successCallback, Callback failureCallback) {
+        this.successCallback = successCallback;
+        this.failureCallback = failureCallback;
+
         ReadableArray fileTypes = null;
         Boolean multipleFiles = null;
         try {
@@ -106,19 +107,6 @@ public class AndroidDocumentPickerModule extends ReactContextBaseJavaModule {
 
         // starting activity for ACTION_OPEN_DOCUMENT
         this.getReactApplicationContext().startActivityForResult(Intent.createChooser(intent, "Choose"), 9900, null);
-
-        // wait for selectedUris
-        while (selectedUris.size() < selectedNumberOfFiles) { }
-
-        if (selectedUris.size() > 0) {
-            WritableArray writableArray = convertToWritableArray(returnFileInfoObject());
-            selectedNumberOfFiles = 20;
-            successCallback.invoke(writableArray);
-        }
-        else {
-            selectedNumberOfFiles = 20;
-            failureCallback.invoke("Error");
-        }
     }
 
     public ArrayList<Object> returnFileInfoObject() {
@@ -161,7 +149,6 @@ public class AndroidDocumentPickerModule extends ReactContextBaseJavaModule {
         return extension;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public WritableArray convertToWritableArray(ArrayList<Object> arrayList) {
         List<String> objectFiles = new ArrayList<String>();
         for (Object objFile : arrayList) {
