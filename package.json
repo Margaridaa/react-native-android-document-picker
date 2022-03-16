@@ -1,7 +1,7 @@
 {
   "name": "react-native-android-document-picker",
   "title": "React Native Android Document Picker",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "React Native Document Picker for Android",
   "main": "index.js",
   "files": [
