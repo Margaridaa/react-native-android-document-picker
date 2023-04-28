@@ -9,69 +9,75 @@
  */
 
 import * as React from 'react';
-import AndroidDocumentPicker from 'react-native-android-document-picker';
-import { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Image, ScrollView } from 'react-native';
+// import AndroidDocumentPicker from 'react-native-android-document-picker';
+import { NativeModules } from 'react-native';
+const { AndroidDocumentPicker } = NativeModules;
+import {useEffect, useState} from 'react';
+import {StyleSheet, View, Text, Image, ScrollView, Button} from 'react-native';
 
 export default function App() {
-
   const [files, setFiles] = useState([]);
 
   useEffect(() => {
     console.log('files', files);
-  }, [files])
-  
+  }, [files]);
+
   return (
     <View style={styles.container}>
+      <Text>React-native-android-document-picker</Text>
       <ScrollView>
-      <Text onPress={async () => {
+        <Button
+          title={'Test the app!'}
+          onPress={async () => {
+            let newFiles = [...files];
+            await AndroidDocumentPicker.openDocument(
+              {multipleFiles: true, fileTypes: ['image/*', 'application/pdf']},
+              array => {
+                console.log('array', array);
+                array.forEach(el => {
+                  const doc = JSON.parse(el);
 
-        let newFiles = [...files];
+                  // {"fileName": "some_pdf_file.pdf",
+                  // "fileSize": "450110",
+                  // "fileType": "application/pdf",
+                  // "fileUri": "content://com.android.providers.downloads.documents/document/1058"}
 
-        await AndroidDocumentPicker.openDocument({multipleFiles: true, fileTypes: ["image/*", "application/pdf"]}, (array) => {
-          console.log('array', array);
-          array.forEach((el) => {
-            const doc = JSON.parse(el);
-          
-            console.log("doc:", doc);
-            // {"fileName": "some_pdf_file.pdf", 
-            // "fileSize": "450110", 
-            // "fileType": "application/pdf", 
-            // "fileUri": "content://com.android.providers.downloads.documents/document/1058"}
-            
-            newFiles.push({
-            fileName: doc.fileName,
-            uri: doc.fileUri,
-            type: doc.fileType,
-            size: doc.fileSize
-            });
-          });
+                  newFiles.push({
+                    fileName: doc.fileName,
+                    uri: doc.fileUri,
+                    type: doc.fileType,
+                    size: doc.fileSize,
+                  });
+                });
 
-          setFiles(newFiles);
-        }, 
-        (error) => {
-          console.log('error', error);
-        });
-      }}>Press</Text>
+                setFiles(newFiles);
+              },
+              error => {
+                console.log('error', error);
+              },
+            );
+          }}
+        />
 
-      <View>
-        {files.map((file) => 
-          <View key={file.fileName}>
-          <Text>{file.fileName}</Text>
-          <Image source={{uri: file.uri}}
-          key={file}
-          style={{
-            borderColor: 'black',
-            borderWidth: 2,
-            borderRadius: 5,
-            width: 100,
-            height: 100,
-            margin: 5,
-          }} />
+        <View>
+          {files.map(file => (
+            <View key={file.fileName}>
+              <Text>{file.fileName}</Text>
+              <Image
+                source={{uri: file.uri}}
+                key={file}
+                style={{
+                  borderColor: 'black',
+                  borderWidth: 2,
+                  borderRadius: 5,
+                  width: 100,
+                  height: 100,
+                  margin: 5,
+                }}
+              />
+            </View>
+          ))}
         </View>
-        )}
-      </View>
-
       </ScrollView>
     </View>
   );
